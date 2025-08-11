@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>منصة وقف الرقمية — تصميم مواقع وتطبيقات إسلامية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f3f5f4; /* light neutral background */
+      --emerald: #0f6b52; /* main green */
+      --emerald-2: #0d8a66;
+      --gold: #d4a94b;
+      --muted: #6b6b6b;
+      --glass: rgba(255,255,255,0.07);
+      --glass-2: rgba(255,255,255,0.12);
+      --card-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+      --glass-border: rgba(255,255,255,0.18);
+      font-family: 'Cairo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#0b1720;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      direction:rtl;
+    }
+    /* Smooth anchor scrolling */
+    html{scroll-behavior:smooth}
+
+    /* Container */
+    .container{max-width:1200px;margin:0 auto;padding:28px}
+
+    /* Header / Nav */
+    header{position:sticky;top:18px;z-index:40}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+      backdrop-filter: blur(8px);
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.40));
+      padding:10px 18px;border-radius:14px;border:1px solid var(--glass-border);
+      box-shadow:var(--card-shadow);
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:56px;height:56px;object-fit:contain;border-radius:10px}
+    .brand h1{font-size:16px;margin:0;font-weight:700;color:var(--emerald)}
+
+    nav ul{display:flex;gap:12px;align-items:center;margin:0;padding:0;list-style:none}
+    nav a{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:600}
+    nav a:hover{color:var(--emerald);background:transparent}
+
+    /* WhatsApp CTA */
+    .cta{
+      display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:12px;cursor:pointer;
+      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 20px rgba(11,23,16,0.06);
+    }
+    .wa-icon{width:20px;height:20px;display:inline-block}
+
+    /* Hero */
+    .hero{
+      margin-top:26px;display:grid;grid-template-columns:1fr 420px;gap:30px;align-items:center;
+    }
+    .hero-card{
+      padding:34px;border-radius:18px;box-shadow:var(--card-shadow);
+      background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6));
+      border:1px solid rgba(0,0,0,0.03);
+    }
+    .hero h2{font-size:28px;margin:0 0 8px;color:var(--emerald)}
+    .hero p{color:#374145;margin:0 0 18px}
+
+    /* Glassy buttons */
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;font-weight:700;border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));backdrop-filter: blur(6px);
+      color:var(--emerald);cursor:pointer;transition:all .28s ease;box-shadow:0 6px 18px rgba(11,23,16,0.06);
+    }
+    .btn:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(11,23,16,0.10)}
+
+    .btn-gold{background:linear-gradient(90deg,var(--gold),#f3c46b);color:#fff;border:none}
+    .btn-gold:hover{filter:brightness(1.03);transform:translateY(-6px) scale(1.01)}
+
+    /* Logo panel on right */
+    .logo-panel{display:flex;align-items:center;justify-content:center}
+    .logo-wrap{width:360px;height:360px;border-radius:22px;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg, rgba(15,107,82,0.08), rgba(15,107,82,0.02));
+      border:1px solid rgba(0,0,0,0.03);box-shadow:var(--card-shadow);position:relative;overflow:hidden}
+    .logo-wrap img{width:70%;height:auto;filter:drop-shadow(0 12px 24px rgba(15,107,82,0.12))}
+
+    /* Services */
+    .section{margin-top:34px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82));border:1px solid rgba(0,0,0,0.04);box-shadow:var(--card-shadow);transition:transform .28s}
+    .card:hover{transform:translateY(-8px)}
+    .card h3{margin:0 0 8px;color:var(--emerald)}
+    .card p{margin:0;color:#425154}
+
+    /* Projects gallery */
+    .projects{margin-top:18px}
+    /* Ensure anchor stops with header offset */
+    #projects{scroll-margin-top:120px}
+    .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .project-item{height:160px;border-radius:12px;background:linear-gradient(180deg,var(--emerald),var(--emerald-2));position:relative;overflow:hidden;color:#fff;display:flex;align-items:end;padding:12px}
+
+    /* Portfolio / images placeholder */
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+    .portfolio-item{position:relative;height:160px;border-radius:12px;overflow:hidden;background:#ffffff;border:1px solid rgba(0,0,0,0.04);box-shadow:var(--card-shadow)}
+    .portfolio-item img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .form input,.form textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px}
+    .socials{display:flex;flex-direction:column;gap:12px}
+    .social-row{display:flex;gap:10px;align-items:center}
+    .social-row svg{width:22px;height:22px}
+
+    footer{margin-top:40px;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));border:1px solid rgba(0,0,0,0.04);display:flex;justify-content:space-between;align-items:center}
+
+    /* Responsive */
+    @media(max-width:980px){
+      .hero{grid-template-columns:1fr;}
+      .logo-wrap{width:300px;height:300px;margin:0 auto}
+      .projects-grid{grid-template-columns:repeat(2,1fr)}
+      .contact-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:520px){nav ul{display:none}.brand h1{display:none}.logo-wrap{width:240px;height:240px}.projects-grid{grid-template-columns:1fr}.projects{padding-bottom:18px}}
+
+    /* small animations */
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+    .logo-wrap img{animation:floaty 6s ease-in-out infinite}
+
+    
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="nav">
+        <div class="brand">
+          <img src="logo.png" alt="logo">
+          <div>
+            <h1>منصة وقف الرقمية</h1>
+            <div style="font-size:12px;color:var(--muted)">تصميم مواقع وتطبيقات إسلامية</div>
+          </div>
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#about">من نحن</a></li>
+            <li><a href="#services">الخدمات</a></li>
+            <li><a href="#projects">مشاريعنا</a></li>
+            <li><a href="#contact">تواصل</a></li>
+          </ul>
+        </nav>
+
+        <a class="cta" href="https://wa.me/218920000000?text=السلام+عليكم+أود+طلب+خدمة+من+منصة+وقف+الرقمية" target="_blank" rel="noopener">
+          <svg class="wa-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 3.5C18.2 1.2 15.1 0 12 0 5.8 0 .8 5 0 11.8c.1 2.1.8 4.1 2 5.9L0 24l6.6-2c1.7 1 3.6 1.5 5.4 1.6 6.1 0 11.1-5 11.1-11.1 0-3.2-1.2-6.2-3.6-8.4z" fill="url(#g)" opacity="0.12"></path><path d="M17.6 14.2c-.3-.2-1.6-.8-1.9-.9-.3-.1-.5-.2-.7.2-.2.3-.9.9-1.1 1.2-.2.3-.4.3-.7.1-1.6-.8-2.6-1.6-3.6-3.1-.3-.4 0-.6.2-.8.2-.2.4-.5.6-.8.2-.3.3-.5.5-.8.2-.3 0-.6-.1-.8-.2-.3-1.9-4-2.6-4.9-.7-.9-1.4-.9-1.9-.9-.5 0-1 .1-1.6.1s-1.3.5-1.9 1.3c-.6.8-.9 1.7-1 2.1-.1.4 0 .8.1 1.1.2.3.9 1.6 2.2 3.4 1.5 2.1 3.4 3.6 6.2 4.6 1.3.4 1.7.4 2.8.3.9-.1 2.8-1.1 3.2-2.1.3-.9.3-1.6.3-1.8 0-.2-.3-.3-.6-.5z" fill="#25D366"></path></svg>
+          <span style="font-weight:700;color:var(--emerald)">طلب خدمة عبر واتساب</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-card">
+          <h2>حوّل صدقتك إلى وقف رقمي يخدم الناس 24/7</h2>
+          <p>نصمم ونطوّر مواقع وتطبيقات إسلامية (قرآن، أذكار، أحاديث، مواقيت صلاة) كاشتراك استضافة أو كصدقة جارية باسمك أو باسم من تحب. نُسلم المشروع جاهزًا للعمل بدون تدخل منك.</p>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px">
+            <a class="btn btn-gold" href="https://wa.me/218920000000?text=السلام+عليكم+أود+طلب+خدمة+من+منصة+وقف+الرقمية" target="_blank">اطلب خدمة الآن</a>
+            <a class="btn" href="#services">اطلع على خدماتنا</a>
+            <a class="btn" href="#projects">مشاريع نموذجية</a>
+          </div>
+
+          <div style="margin-top:18px;font-size:14px;color:var(--muted)">حساباتنا على السوشيال: @vakifplatformdesign</div>
+        </div>
+
+        <aside class="logo-panel">
+          <div class="logo-wrap">
+            <img src="logo.png" alt="منصة وقف الرقمية">
+          </div>
+        </aside>
+      </section>
+
+      <section id="about" class="section">
+        <div class="hero-card">
+          <h3 style="margin-top:0;color:var(--emerald)">من نحن</h3>
+          <p>منصة وقف الرقمية متخصصة في تصميم وبناء مشاريع إسلامية رقمية تُقدّم كـ صدقة جارية — مواقع وتطبيقات القرآن الكريم، الأذكار، الأحاديث الصحيحة، ومواقيت الصلاة. نقدم تصميم واجهات مستخدم احترافي، برمجة، وتقديم استضافة آمنة مع تحديثات دورية.</p>
+        </div>
+      </section>
+
+      <section id="services" class="section">
+        <h2 style="margin:6px 0 12px;color:var(--emerald)">خدماتنا</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>تصميم وتطوير مواقع القرآن والتلاوات</h3>
+            <p>مواقع متكاملة تعرض القرآن مصحوبًا بتسجيلات صوتية، بحث في الآيات، وترجمات بعدة لغات.</p>
+          </article>
+
+          <article class="card">
+            <h3>تطبيقات الأذكار والأدعية</h3>
+            <p>تطبيقات تعمل على الهاتف مع تذكير يومي، أصوات، وإمكانية إهداء التطبيق صدقة عن اسم متوفى.</p>
+          </article>
+
+          <article class="card">
+            <h3>تكامل صوتيات وقواعد بيانات</h3>
+            <p>رفع وتكامل ملفات صوتية لقراء مختلفين، ترتيب الآيات، ودعم لغات متعددة.</p>
+          </article>
+
+          <article class="card">
+            <h3>الاستضافة والصيانة</h3>
+            <p>حزم استضافة آمنة مع تحديثات دورية، نسخ احتياطي، ودعم فني حسب الاتفاق.</p>
+          </article>
+
+          <article class="card">
+            <h3>التصميم البصري والهوية</h3>
+            <p>هوية بصرية متكاملة — لوجو، غلاف صفحات السوشيال، مواد تسويقية بما يتوافق مع طابع المنصة.</p>
+          </article>
+
+          <article class="card">
+            <h3>إعلانات وإدارة محتوى</h3>
+            <p>خدمات إعداد الإعلانات والترويج، ونشر المحتوى لضمان وصول الصدقة لأكبر عدد من المستفيدين.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="projects" class="section projects">
+        <h2 style="margin:6px 0 12px;color:var(--emerald)">نماذج سريعة</h2>
+        <div class="projects-grid">
+          <div class="project-item">مثال: موقع قرآن تفاعلي</div>
+          <div class="project-item">مثال: تطبيق أذكار يومية</div>
+          <div class="project-item">مثال: مكتبة أحاديث صوتية</div>
+        </div>
+
+        <div style="margin-top:12px" class="portfolio-grid" aria-label="شبكة صور المشاريع">
+          <figure class="portfolio-item"><img class="project-img" data-base="1" alt="صورة مشروع 1" loading="lazy" decoding="async"></figure>
+          <figure class="portfolio-item"><img class="project-img" data-base="2" alt="صورة مشروع 2" loading="lazy" decoding="async"></figure>
+          <figure class="portfolio-item"><img class="project-img" data-base="3" alt="صورة مشروع 3" loading="lazy" decoding="async"></figure>
+          <figure class="portfolio-item"><img class="project-img" data-base="4" alt="صورة مشروع 4" loading="lazy" decoding="async"></figure>
+        </div>
+      </section>
+
+      
+
+      <section id="contact" class="section">
+        <h2 style="margin:6px 0 12px;color:var(--emerald)">تواصل معنا</h2>
+        <div class="contact-grid">
+          <div class="form hero-card">
+            <input type="text" placeholder="اسمك" />
+            <input type="email" placeholder="بريدك الإلكتروني" />
+            <textarea rows="5" placeholder="وصف مختصر للمشروع أو الفكرة"></textarea>
+            <a class="btn btn-gold" href="https://wa.me/218920000000?text=السلام+عليكم+أود+طلب+خدمة+وملء+نموذج+التواصل" target="_blank">أرسل عبر واتساب</a>
+          </div>
+
+          <aside class="hero-card">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-weight:700;color:var(--emerald)">معلومات التواصل</div>
+              <div style="color:var(--muted)"><strong>الهاتف:</strong> <a href="tel:+218920000000">+218 92 000 0000</a></div>
+              <div style="color:var(--muted)"><strong>الايميل:</strong> <a href="mailto:vakifplatformdesign@gmail.com">vakifplatformdesign@gmail.com</a></div>
+              <div style="color:var(--muted)"><strong>انستغرام / تيك توك / فيسبوك:</strong> @vakifplatformdesign</div>
+
+              <div style="margin-top:8px">
+                <a class="btn" href="https://wa.me/218920000000?text=السلام+عليكم+أود+الاستفسار+عن+خدمات+المنصة" target="_blank">محادثة سريعة</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div style="display:flex;gap:14px;align-items:center">
+        <img src="logo.png" style="width:48px;height:48px;border-radius:8px;object-fit:contain" alt="logo">
+        <div>
+          <div style="font-weight:700;color:var(--emerald)">منصة وقف الرقمية</div>
+          <div style="font-size:13px;color:var(--muted)">جميع الحقوق محفوظة © منصة وقف الرقمية</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="https://instagram.com/vakifplatformdesign" target="_blank" style="text-decoration:none;color:var(--muted)">@vakifplatformdesign</a>
+        <a href="mailto:vakifplatformdesign@gmail.com" style="text-decoration:none;color:var(--muted)">vakifplatformdesign@gmail.com</a>
+        <a class="btn" href="https://wa.me/218920000000?text=السلام+عليكم+أود+الاستفسار+عن+خدمات+المنصة" target="_blank">اتصل الآن</a>
+      </div>
+    </footer>
+
+  </div>
+  
+  
+
+  <script>
+    // Load images 1..4 with smart extension fallback (webp, jpg, jpeg, png)
+    (function(){
+      var extensions = ['webp','jpg','jpeg','png'];
+      var imgs = document.querySelectorAll('.project-img');
+      imgs.forEach(function(img){
+        var base = img.getAttribute('data-base');
+        var i = 0;
+        function tryNext(){
+          if(i >= extensions.length){ return; }
+          var candidate = base + '.' + extensions[i++];
+          var test = new Image();
+          test.onload = function(){ img.src = candidate; };
+          test.onerror = tryNext;
+          test.src = candidate;
+        }
+        tryNext();
+      });
+    })();
+
+    // لا يوجد تكبير عند الضغط على الصور
+  </script>
+</body>
+</html>
