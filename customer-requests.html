@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>طلبات المستخدم — منصة وقف الرقمية</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="shortcut icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f3f5f4;
+      --emerald: #0f6b52;
+      --emerald-2: #0d8a66;
+      --gold: #d4a94b;
+      --muted: #6b6b6b;
+      --glass: rgba(255,255,255,0.07);
+      --glass-2: rgba(255,255,255,0.12);
+      --card-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+      --glass-border: rgba(255,255,255,0.18);
+      font-family: 'Cairo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#0b1720;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      direction:rtl;
+    }
+
+    .container{max-width:1200px;margin:0 auto;padding:28px}
+
+    /* Header */
+    .page-header{
+      text-align:center;margin-bottom:40px;padding:40px 0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+      border-radius:20px;border:1px solid rgba(15,107,82,0.08);
+    }
+    .logo-large{width:120px;height:120px;margin:0 auto 20px;border-radius:20px;object-fit:contain;filter:drop-shadow(0 12px 24px rgba(15,107,82,0.15))}
+    .page-title{color:var(--emerald);font-size:32px;margin:0 0 8px;font-weight:700}
+    .page-subtitle{color:var(--muted);font-size:16px;margin:0}
+
+    /* Stats */
+    .stats-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:32px
+    }
+    .stat-card{
+      background:rgba(255,255,255,0.9);padding:24px;border-radius:16px;text-align:center;
+      border:1px solid rgba(15,107,82,0.06);box-shadow:var(--card-shadow);
+    }
+    .stat-number{font-size:32px;font-weight:700;color:var(--emerald);margin:0 0 8px}
+    .stat-label{color:var(--muted);font-size:14px;margin:0}
+
+    /* Requests grid */
+    .requests-grid{
+      display:grid;gap:24px;margin-bottom:32px
+    }
+    .request-card{
+      background:rgba(255,255,255,0.95);padding:28px;border-radius:18px;
+      border:1px solid rgba(15,107,82,0.08);box-shadow:var(--card-shadow);
+      transition:all 0.3s ease;position:relative;overflow:hidden;
+    }
+    .request-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:4px;
+      background:linear-gradient(90deg, var(--emerald), var(--gold));
+    }
+    .request-card:hover{
+      transform:translateY(-4px);box-shadow:0 12px 40px rgba(15,107,82,0.15);
+    }
+
+    .request-header{
+      display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;
+      flex-wrap:wrap;gap:16px;
+    }
+    .request-info h3{
+      color:var(--emerald);font-size:20px;margin:0 0 8px;font-weight:600;
+    }
+    .request-meta{
+      display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted);
+    }
+    .request-meta span{display:flex;align-items:center;gap:4px}
+    .request-status{
+      padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;
+      color:#fff;
+    }
+    .status-pending{background:#f59e0b}
+    .status-approved{background:#10b981}
+    .status-rejected{background:#ef4444}
+    .status-progress{background:#3b82f6}
+    .status-completed{background:#8b5cf6}
+
+    .request-details{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:20px;
+    }
+    .detail-group h4{
+      color:var(--emerald-2);font-size:16px;margin:0 0 8px;font-weight:600;
+    }
+    .detail-group p{
+      margin:0;color:#374145;background:rgba(15,107,82,0.05);padding:8px 12px;
+      border-radius:8px;font-size:14px;
+    }
+
+    .request-description{
+      background:rgba(15,107,82,0.03);padding:16px;border-radius:12px;margin-bottom:20px;
+      border-right:4px solid var(--emerald);
+    }
+    .request-description h4{
+      color:var(--emerald);font-size:16px;margin:0 0 12px;font-weight:600;
+    }
+    .request-description p{
+      margin:0;color:#374145;line-height:1.6;
+    }
+
+    .request-actions{
+      display:flex;gap:12px;flex-wrap:wrap;
+    }
+    .action-btn{
+      padding:8px 16px;border-radius:8px;font-size:14px;font-weight:600;
+      text-decoration:none;transition:all 0.3s ease;border:none;cursor:pointer;
+      font-family:inherit;
+    }
+    .btn-primary{
+      background:var(--emerald);color:#fff;
+    }
+    .btn-primary:hover{background:var(--emerald-2);transform:translateY(-2px)}
+    .btn-success{
+      background:#10b981;color:#fff;
+    }
+    .btn-success:hover{background:#059669;transform:translateY(-2px)}
+    .btn-danger{
+      background:#ef4444;color:#fff;
+    }
+    .btn-danger:hover{background:#dc2626;transform:translateY(-2px)}
+    .btn-whatsapp{
+      background:#25d366;color:#fff;display:inline-flex;align-items:center;
+    }
+    .btn-whatsapp:hover{background:#128c7e;transform:translateY(-2px)}
+    .btn-secondary{
+      background:rgba(15,107,82,0.1);color:var(--emerald);border:1px solid rgba(15,107,82,0.2);
+    }
+    .btn-secondary:hover{background:rgba(15,107,82,0.15)}
+
+    /* Empty state */
+    .empty-state{
+      text-align:center;padding:60px 20px;color:var(--muted);
+    }
+    .empty-state h3{font-size:24px;margin:0 0 16px;color:var(--emerald)}
+    .empty-state p{font-size:16px;margin:0 0 24px}
+
+    /* Back button */
+    .back-btn{
+      display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;
+      background:var(--emerald);color:#fff;text-decoration:none;font-weight:600;
+      transition:all 0.3s ease;margin-bottom:24px;
+    }
+    .back-btn:hover{background:var(--emerald-2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(15,107,82,0.2)}
+
+    /* Footer */
+    .page-footer{
+      text-align:center;margin-top:40px;padding:24px;color:var(--muted);
+      border-top:1px solid rgba(15,107,82,0.08)
+    }
+
+    /* نافذة التحميل */
+    .loading-modal{
+      position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);
+      display:flex;align-items:center;justify-content:center;z-index:9999;
+    }
+    .loading-content{
+      text-align:center;padding:40px;background:rgba(255,255,255,0.95);
+      border-radius:24px;border:2px solid var(--emerald);box-shadow:0 20px 60px rgba(15,107,82,0.2);
+      max-width:400px;width:100%;
+    }
+    .loading-logo img{
+      width:80px;height:80px;border-radius:16px;margin-bottom:24px;
+      filter:drop-shadow(0 8px 16px rgba(15,107,82,0.15));
+    }
+    .loading-spinner{
+      width:40px;height:40px;border:4px solid rgba(15,107,82,0.1);border-top:4px solid var(--emerald);
+      border-radius:50%;margin:24px auto;animation:spin 1s linear infinite;
+    }
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .loading-content h2{
+      color:var(--emerald);font-size:20px;margin:0 0 12px;font-weight:600;
+    }
+    .loading-content p{
+      color:var(--muted);font-size:16px;margin:0 0 24px;
+    }
+    
+    /* زر الزجاج */
+    .glass-btn{
+      background:linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.2);color:var(--emerald);
+      padding:12px 24px;border-radius:12px;font-size:16px;font-weight:600;
+      cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);
+      font-family:inherit;
+    }
+    .glass-btn:hover{
+      background:linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+      transform:translateY(-2px);box-shadow:0 8px 25px rgba(15,107,82,0.15);
+    }
+    
+    /* نافذة تسجيل الدخول */
+    .login-modal{
+      position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);
+      display:flex;align-items:center;justify-content:center;z-index:10000;
+      backdrop-filter:blur(8px);
+    }
+    .login-content{
+      background:rgba(255,255,255,0.95);padding:40px;border-radius:24px;
+      border:2px solid var(--emerald);box-shadow:0 20px 60px rgba(15,107,82,0.25);
+      max-width:400px;width:100%;text-align:center;
+    }
+    .login-logo{
+      width:80px;height:80px;border-radius:16px;margin-bottom:20px;
+      filter:drop-shadow(0 8px 16px rgba(15,107,82,0.15));
+    }
+    .login-header h2{
+      color:var(--emerald);font-size:24px;margin:0 0 8px;font-weight:700;
+    }
+    .login-header p{
+      color:var(--muted);font-size:14px;margin:0 0 24px;
+    }
+    
+    .login-form .form-group{
+      margin-bottom:20px;text-align:right;
+    }
+    .login-form label{
+      display:block;margin-bottom:8px;color:var(--emerald);font-weight:600;font-size:14px;
+    }
+    .login-form input{
+      width:100%;padding:12px 16px;border:2px solid rgba(15,107,82,0.1);
+      border-radius:10px;font-size:16px;font-family:inherit;transition:all 0.3s ease;
+      background:rgba(255,255,255,0.9);
+    }
+    .login-form input:focus{
+      outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px rgba(15,107,82,0.1);
+      background:#fff;
+    }
+    
+    .login-submit-btn{
+      width:100%;padding:14px;background:linear-gradient(135deg, var(--emerald), var(--emerald-2));
+      color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;
+      cursor:pointer;transition:all 0.3s ease;font-family:inherit;
+    }
+    .login-submit-btn:hover{
+      transform:translateY(-2px);box-shadow:0 8px 25px rgba(15,107,82,0.3);
+    }
+    
+    .login-error{
+      margin-top:20px;padding:12px;background:#fef2f2;border:1px solid #fecaca;
+      border-radius:8px;color:#dc2626;font-size:14px;
+    }
+    
+    /* المحتوى الرئيسي */
+    .main-content{display:block}
+    .content-header{
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;
+    }
+    .logout-btn{
+      padding:8px 16px;background:rgba(239,68,68,0.1);color:#ef4444;
+      border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-size:14px;
+      cursor:pointer;transition:all 0.3s ease;font-family:inherit;
+    }
+    .logout-btn:hover{
+      background:rgba(239,68,68,0.15);transform:translateY(-1px);
+    }
+    
+    /* نافذة التأكيد */
+    .confirm-modal{
+      position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);
+      display:flex;align-items:center;justify-content:center;z-index:10001;
+      backdrop-filter:blur(8px);
+    }
+    .confirm-content{
+      background:rgba(255,255,255,0.95);padding:32px;border-radius:20px;
+      border:2px solid var(--emerald);box-shadow:0 20px 60px rgba(15,107,82,0.25);
+      max-width:400px;width:100%;text-align:center;
+    }
+    .confirm-header{
+      margin-bottom:20px;
+    }
+    .confirm-logo{
+      width:60px;height:60px;border-radius:12px;margin-bottom:16px;
+      filter:drop-shadow(0 6px 12px rgba(15,107,82,0.15));
+    }
+    .confirm-header h3{
+      color:var(--emerald);font-size:20px;margin:0;font-weight:600;
+    }
+    .confirm-content p{
+      color:var(--muted);font-size:16px;margin:0 0 24px;line-height:1.5;
+    }
+    .confirm-actions{
+      display:flex;gap:12px;justify-content:center;
+    }
+    .confirm-actions .btn-primary{
+      background:var(--emerald);color:#fff;padding:10px 20px;border-radius:8px;
+      border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s ease;
+    }
+    .confirm-actions .btn-primary:hover{
+      background:var(--emerald-2);transform:translateY(-2px);
+    }
+    .confirm-actions .btn-secondary{
+      background:rgba(15,107,82,0.1);color:var(--emerald);padding:10px 20px;border-radius:8px;
+      border:1px solid rgba(15,107,82,0.2);font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s ease;
+    }
+    .confirm-actions .btn-secondary:hover{
+      background:rgba(15,107,82,0.15);
+    }
+
+    @media(max-width:768px){
+      .container{padding:20px}
+      .page-header{padding:30px 20px}
+      .request-card{padding:20px}
+      .request-header{flex-direction:column;align-items:flex-start}
+      .request-details{grid-template-columns:1fr}
+      .page-title{font-size:28px}
+      .loading-content,.login-content{padding:30px 20px;margin:20px}
+    }
+  </style>
+</head>
+  <body>
+    <!-- نافذة التحميل -->
+    <div id="loadingModal" class="loading-modal">
+      <div class="loading-content">
+        <div class="loading-logo">
+          <img src="logo.png" alt="شعار منصة وقف الرقمية">
+        </div>
+        <div class="loading-spinner"></div>
+        <h2>عفواً، هذه الصفحة خاصة بمسؤولي الموقع</h2>
+        <p>للاستمرار يرجى تسجيل الدخول</p>
+        <button id="loginBtn" class="glass-btn">تسجيل الدخول</button>
+      </div>
+    </div>
+
+    <!-- نافذة تسجيل الدخول -->
+    <div id="loginModal" class="login-modal" style="display: none;">
+      <div class="login-content">
+        <div class="login-header">
+          <img src="logo.png" alt="شعار منصة وقف الرقمية" class="login-logo">
+          <h2>تسجيل الدخول</h2>
+          <p>صفحة إدارة طلبات المستخدمين</p>
+        </div>
+        
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          
+          <button type="submit" class="login-submit-btn">دخول</button>
+        </form>
+        
+        <div id="loginError" class="login-error" style="display: none;">
+          <p>❌ اسم المستخدم أو كلمة المرور غير صحيحة</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- المحتوى الرئيسي (مخفي حتى تسجيل الدخول) -->
+    <div id="mainContent" class="main-content" style="display: none;">
+      <div class="container">
+        <div class="content-header">
+          <a href="index.html" class="back-btn">← العودة للرئيسية</a>
+          <button id="logoutBtn" class="logout-btn">تسجيل الخروج</button>
+        </div>
+        
+        <header class="page-header">
+          <img src="logo.png" alt="شعار منصة وقف الرقمية" class="logo-large">
+          <h1 class="page-title">طلبات المستخدم</h1>
+          <p class="page-subtitle">إدارة وتتبع جميع طلبات الخدمات المقدمة</p>
+        </header>
+
+    <main>
+      <!-- إحصائيات سريعة -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="totalRequests">0</div>
+          <div class="stat-label">إجمالي الطلبات</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pendingRequests">0</div>
+          <div class="stat-label">طلبات قيد الانتظار</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="approvedRequests">0</div>
+          <div class="stat-label">طلبات تمت الموافقة عليها</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="rejectedRequests">0</div>
+          <div class="stat-label">طلبات لم تتم الموافقة عليها</div>
+        </div>
+      </div>
+
+      <!-- قائمة الطلبات -->
+      <div class="requests-grid" id="requestsContainer">
+        <!-- الطلبات ستظهر هنا ديناميكياً -->
+      </div>
+
+      <!-- حالة فارغة -->
+      <div class="empty-state" id="emptyState" style="display:none">
+        <h3>لا توجد طلبات بعد</h3>
+        <p>عندما يقوم المستخدمون بتقديم طلبات، ستظهر هنا</p>
+        <a href="service-request.html" class="action-btn btn-primary">إضافة طلب تجريبي</a>
+      </div>
+    </main>
+
+          </main>
+
+      <footer class="page-footer">
+        <p>جميع الحقوق محفوظة © منصة وقف الرقمية 2025</p>
+        <p>صفحة إدارة طلبات المستخدمين</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // بيانات المستخدمين المسموح لهم
+    const allowedUsers = [
+      { username: 'Abdelbary', password: '199819981998' },
+      { username: 'COADMIN', password: '123123123' },
+      { username: 'COCOADMIN', password: '123123123' }
+    ];
+    
+    // بيانات الطلبات (في الواقع ستأتي من قاعدة البيانات)
+    let requests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+    
+    // تحديث الإحصائيات
+    function updateStats() {
+      const total = requests.length;
+      const pending = requests.filter(r => r.status === 'pending').length;
+      const approved = requests.filter(r => r.status === 'approved').length;
+      const rejected = requests.filter(r => r.status === 'rejected').length;
+      
+      document.getElementById('totalRequests').textContent = total;
+      document.getElementById('pendingRequests').textContent = pending;
+      document.getElementById('approvedRequests').textContent = approved;
+      document.getElementById('rejectedRequests').textContent = rejected;
+    }
+    
+    // عرض الطلبات
+    function displayRequests() {
+      const container = document.getElementById('requestsContainer');
+      const emptyState = document.getElementById('emptyState');
+      
+      if (requests.length === 0) {
+        container.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      container.style.display = 'grid';
+      emptyState.style.display = 'none';
+      
+      container.innerHTML = requests.map((request, index) => `
+        <div class="request-card">
+          <div class="request-header">
+            <div class="request-info">
+              <h3>طلب #${index + 1} - ${request.serviceType || 'خدمة مخصصة'}</h3>
+              <div class="request-meta">
+                <span>📅 ${formatServiceDate(request.timestamp)}</span>
+                <span>👤 ${request.fullName}</span>
+                <span>📱 ${request.phone}</span>
+                <span>📧 ${request.email}</span>
+              </div>
+            </div>
+                         <div class="request-status ${getStatusClass(request.status)}">${getStatusText(request.status)}</div>
+          </div>
+          
+          <div class="request-details">
+            <div class="detail-group">
+              <h4>نوع الخدمة</h4>
+              <p>${getServiceTypeText(request.serviceType)}</p>
+            </div>
+            <div class="detail-group">
+              <h4>الميزانية</h4>
+              <p>${getBudgetText(request.budgetMin, request.budgetMax)}</p>
+            </div>
+            <div class="detail-group">
+              <h4>الموعد المطلوب</h4>
+              <p>${getTimelineText(request.timeline)}</p>
+            </div>
+            <div class="detail-group">
+              <h4>رقم الواتساب</h4>
+              <p>${request.whatsapp || 'غير محدد'}</p>
+            </div>
+          </div>
+          
+          <div class="request-description">
+            <h4>وصف المشروع</h4>
+            <p>${request.projectDescription || 'لا يوجد وصف'}</p>
+          </div>
+          
+          ${request.additionalInfo ? `
+            <div class="request-description">
+              <h4>معلومات إضافية</h4>
+              <p>${request.additionalInfo}</p>
+            </div>
+          ` : ''}
+          
+          <div class="request-actions">
+            <button onclick="approveRequest(${index})" class="action-btn btn-success">قبول الطلب</button>
+            <button onclick="rejectRequest(${index})" class="action-btn btn-danger">رفض الطلب</button>
+            <a href="${getWhatsAppLink(request.whatsapp || request.phone)}" 
+               target="_blank" class="action-btn btn-whatsapp">
+              <img src="whatsapp.png" alt="واتساب" style="width:16px;height:16px;margin-left:4px">
+              الانضمام لدردشة واتساب
+            </a>
+            <button onclick="deleteRequest(${index})" class="action-btn btn-secondary" style="background:#ef4444;color:#fff">حذف الطلب</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // دالة تنسيق التاريخ مع الساعة
+    function formatServiceDate(timestamp) {
+      try {
+        if (timestamp) {
+          const date = new Date(timestamp);
+          return date.toLocaleString('en-GB', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          });
+        }
+        return 'غير محدد';
+      } catch (error) {
+        return 'غير محدد';
+      }
+    }
+
+    // نصوص مساعدة
+    function getServiceTypeText(type) {
+      const types = {
+        'quran-website': 'موقع قرآن وتلاوات',
+        'dhikr-app': 'تطبيق أذكار وأدعية',
+        'hadith-library': 'مكتبة أحاديث صوتية',
+        'prayer-times': 'تطبيق مواقيت الصلاة',
+        'islamic-education': 'موقع تعليمي إسلامي',
+        'custom-project': 'مشروع مخصص آخر'
+      };
+      return types[type] || 'غير محدد';
+    }
+    
+    function getBudgetText(min, max) {
+      if (min === max) {
+        return `${min}$`;
+      }
+      return `${min}$ - ${max}$`;
+    }
+    
+    function getTimelineText(timeline) {
+      const timelines = {
+        'urgent': 'عاجل',
+        'medium': 'متوسط',
+        'flexible': 'مرن',
+        'long-term': 'طويل المدى'
+      };
+      return timelines[timeline] || 'غير محدد';
+    }
+    
+    // نصوص وألوان الحالة
+    function getStatusText(status) {
+      const statuses = {
+        'pending': 'قيد الانتظار',
+        'approved': 'تمت الموافقة',
+        'rejected': 'مرفوض',
+        'in-progress': 'قيد التنفيذ',
+        'completed': 'مكتمل'
+      };
+      return statuses[status] || 'قيد الانتظار';
+    }
+    
+    function getStatusClass(status) {
+      const classes = {
+        'pending': 'status-pending',
+        'approved': 'status-approved',
+        'rejected': 'status-rejected',
+        'in-progress': 'status-progress',
+        'completed': 'status-completed'
+      };
+      return classes[status] || 'status-pending';
+    }
+    
+    // قبول الطلب
+    function approveRequest(index) {
+      showConfirmModal('قبول الطلب', 'هل أنت متأكد من قبول هذا الطلب؟', 'قبول', 'approve', index);
+    }
+    
+    // رفض الطلب
+    function rejectRequest(index) {
+      showConfirmModal('رفض الطلب', 'هل أنت متأكد من رفض هذا الطلب؟', 'رفض', 'reject', index);
+    }
+    
+    // عرض نافذة التأكيد
+    function showConfirmModal(title, message, actionText, action, index) {
+      const modal = document.createElement('div');
+      modal.className = 'confirm-modal';
+      modal.innerHTML = `
+        <div class="confirm-content">
+          <div class="confirm-header">
+            <img src="logo.png" alt="شعار منصة وقف الرقمية" class="confirm-logo">
+            <h3>${title}</h3>
+          </div>
+          <p>${message}</p>
+          <div class="confirm-actions">
+            <button class="btn-secondary" onclick="closeConfirmModal()">إلغاء</button>
+            <button class="btn-primary" onclick="executeAction('${action}', ${index})">${actionText}</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    
+    // إغلاق نافذة التأكيد
+    function closeConfirmModal() {
+      const modal = document.querySelector('.confirm-modal');
+      if (modal) {
+        modal.remove();
+      }
+    }
+    
+    // تنفيذ الإجراء
+    function executeAction(action, index) {
+      if (action === 'approve') {
+        requests[index].status = 'approved';
+        requests[index].approvedAt = Date.now();
+      } else if (action === 'reject') {
+        requests[index].status = 'rejected';
+        requests[index].rejectedAt = Date.now();
+      } else if (action === 'delete') {
+        requests.splice(index, 1);
+      }
+      
+      localStorage.setItem('customerRequests', JSON.stringify(requests));
+      displayRequests();
+      updateStats();
+      closeConfirmModal();
+    }
+    
+    // ربط واتساب ذكي
+    function getWhatsAppLink(phone) {
+      if (!phone) return '#';
+      
+      // تنظيف الرقم من المسافات والرموز
+      let cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+      
+      // إذا بدأ بصفرين، احذفهم
+      if (cleanPhone.startsWith('00')) {
+        cleanPhone = cleanPhone.substring(2);
+      }
+      // إذا بدأ بصفر واحد، احذفه وأضف 00218
+      else if (cleanPhone.startsWith('0')) {
+        cleanPhone = '00218' + cleanPhone.substring(1);
+      }
+      // إذا لم يبدأ بصفر، أضف 00218
+      else if (!cleanPhone.startsWith('00218')) {
+        cleanPhone = '00218' + cleanPhone;
+      }
+      
+      const message = encodeURIComponent('السلام عليكم ورحمة الله وبركاته نتواصل مع حضرتكم من منصة وقف الرقمية');
+      return `https://wa.me/${cleanPhone}?text=${message}`;
+    }
+    
+    // حذف طلب
+    function deleteRequest(index) {
+      showConfirmModal('حذف الطلب', 'هل أنت متأكد من حذف هذا الطلب؟', 'حذف', 'delete', index);
+    }
+    
+    // إضافة طلب تجريبي
+    function addSampleRequest() {
+      const sampleRequest = {
+        fullName: 'أحمد محمد',
+        phone: '+218 92 000 0000',
+        whatsapp: '+218 92 000 0000',
+        email: 'ahmed@example.com',
+        serviceType: 'quran-website',
+        budgetMin: 1000,
+        budgetMax: 3000,
+        timeline: 'normal',
+        projectDescription: 'أريد موقع قرآن تفاعلي مع تلاوات صوتية وبحث في الآيات',
+        additionalInfo: 'أفضل أن يكون التصميم بسيط وأنيق مع دعم اللغة العربية',
+        status: 'pending',
+        timestamp: Date.now()
+      };
+      
+      requests.unshift(sampleRequest);
+      localStorage.setItem('customerRequests', JSON.stringify(requests));
+      displayRequests();
+      updateStats();
+    }
+    
+    // تهيئة الصفحة
+    function init() {
+      updateStats();
+      displayRequests();
+    }
+    
+    // وظائف تسجيل الدخول
+    function showLoginModal() {
+      document.getElementById('loadingModal').style.display = 'none';
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+    
+    function hideLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+    
+    function showMainContent() {
+      document.getElementById('mainContent').style.display = 'block';
+      init(); // تهيئة المحتوى الرئيسي
+    }
+    
+    function hideMainContent() {
+      document.getElementById('mainContent').style.display = 'none';
+    }
+    
+    function logout() {
+      hideMainContent();
+      document.getElementById('loadingModal').style.display = 'flex';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').style.display = 'none';
+    }
+    
+    // التحقق من تسجيل الدخول
+    function checkLogin(username, password) {
+      return allowedUsers.some(user => 
+        user.username === username && user.password === password
+      );
+    }
+    
+    // معالجة تسجيل الدخول
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (checkLogin(username, password)) {
+        hideLoginModal();
+        showMainContent();
+        // حفظ حالة تسجيل الدخول
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('currentUser', username);
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('password').value = '';
+      }
+    });
+    
+    // أحداث الأزرار
+    document.getElementById('loginBtn').addEventListener('click', showLoginModal);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    
+    // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+    function checkLoginStatus() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      
+      if (isLoggedIn) {
+        showMainContent();
+      } else {
+        // إظهار نافذة التحميل لمدة ثانيتين ثم نافذة تسجيل الدخول
+        setTimeout(() => {
+          showLoginModal();
+        }, 2000);
+      }
+    }
+    
+    // تشغيل عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', checkLoginStatus);
+    
+    // استماع للتحديثات من الصفحات الأخرى
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'customerRequests') {
+        requests = JSON.parse(e.newValue || '[]');
+        updateStats();
+        displayRequests();
+      }
+    });
+  </script>
+</body>
+</html> 

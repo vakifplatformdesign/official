@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>منصة وقف الرقمية — تصميم مواقع وتطبيقات إسلامية</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="shortcut icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f3f5f4; /* light neutral background */
+      --emerald: #0f6b52; /* main green */
+      --emerald-2: #0d8a66;
+      --gold: #d4a94b;
+      --muted: #6b6b6b;
+      --glass: rgba(255,255,255,0.07);
+      --glass-2: rgba(255,255,255,0.12);
+      --card-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+      --glass-border: rgba(255,255,255,0.18);
+      font-family: 'Cairo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#0b1720;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      direction:rtl;
+    }
+    /* Smooth anchor scrolling */
+    html{scroll-behavior:smooth}
+
+    /* Container */
+    .container{max-width:1200px;margin:0 auto;padding:28px}
+
+    /* Header / Nav */
+    header{position:sticky;top:18px;z-index:40}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+      backdrop-filter: blur(8px);
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.40));
+      padding:10px 18px;border-radius:14px;border:1px solid var(--glass-border);
+      box-shadow:var(--card-shadow);
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:56px;height:56px;object-fit:contain;border-radius:10px}
+    .brand h1{font-size:16px;margin:0;font-weight:700;color:var(--emerald)}
+
+    nav ul{display:flex;gap:12px;align-items:center;margin:0;padding:0;list-style:none}
+    nav a{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:600}
+    nav a:hover{color:var(--emerald);background:transparent}
+
+    /* WhatsApp CTA */
+    .cta{
+      display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:12px;cursor:pointer;
+      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.12);box-shadow:0 6px 20px rgba(11,23,16,0.06);
+      transition:all 0.3s ease;position:relative;overflow:hidden;
+    }
+    .cta:hover{
+      transform:translateY(-2px);box-shadow:0 8px 25px rgba(11,23,16,0.12);
+      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+    }
+    .cta::before{
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition:left 0.6s ease;
+    }
+    .cta:hover::before{left:100%}
+    .wa-icon{width:20px;height:20px;display:inline-block;animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+    /* Hero */
+    .hero{
+      margin-top:26px;display:grid;grid-template-columns:1fr 420px;gap:30px;align-items:center;
+    }
+    .hero-card{
+      padding:34px;border-radius:18px;box-shadow:var(--card-shadow);
+      background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6));
+      border:1px solid rgba(0,0,0,0.03);
+    }
+    .hero h2{font-size:28px;margin:0 0 8px;color:var(--emerald)}
+    .hero p{color:#374145;margin:0 0 18px}
+
+    /* Glassy buttons */
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;font-weight:700;border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));backdrop-filter: blur(6px);
+      color:var(--emerald);cursor:pointer;transition:all .28s ease;box-shadow:0 6px 18px rgba(11,23,16,0.06);
+    }
+    .btn:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(11,23,16,0.10)}
+
+    .btn-gold{background:linear-gradient(90deg,var(--gold),#f3c46b);color:#fff;border:none}
+    .btn-gold:hover{filter:brightness(1.03);transform:translateY(-6px) scale(1.01)}
+
+    /* Logo panel on right */
+    .logo-panel{display:flex;align-items:center;justify-content:center}
+    .logo-wrap{width:360px;height:360px;border-radius:22px;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg, rgba(15,107,82,0.08), rgba(15,107,82,0.02));
+      border:1px solid rgba(0,0,0,0.03);box-shadow:var(--card-shadow);position:relative;overflow:hidden}
+    .logo-wrap img{width:70%;height:auto;filter:drop-shadow(0 12px 24px rgba(15,107,82,0.12))}
+
+    /* Services */
+    .section{margin-top:34px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{padding:18px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82));border:1px solid rgba(0,0,0,0.04);box-shadow:var(--card-shadow);transition:transform .28s}
+    .card:hover{transform:translateY(-8px)}
+    .card h3{margin:0 0 8px;color:var(--emerald)}
+    .card p{margin:0;color:#425154}
+
+    /* Projects gallery */
+    .projects{margin-top:18px}
+    /* Ensure anchor stops with header offset for all sections */
+    #home, #about, #services, #projects, #contact{scroll-margin-top:120px}
+    .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .project-item{height:160px;border-radius:12px;background:linear-gradient(180deg,var(--emerald),var(--emerald-2));position:relative;overflow:hidden;color:#fff;display:flex;align-items:end;padding:12px}
+
+    /* Portfolio / images placeholder */
+    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+    .portfolio-item{position:relative;height:160px;border-radius:12px;overflow:hidden;background:#ffffff;border:1px solid rgba(0,0,0,0.04);box-shadow:var(--card-shadow)}
+    .portfolio-item img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .form input,.form textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:12px}
+    .socials{display:flex;flex-direction:column;gap:12px}
+    .social-row{display:flex;gap:10px;align-items:center}
+    .social-row svg{width:22px;height:22px}
+
+    footer{margin-top:40px;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));border:1px solid rgba(0,0,0,0.04);display:flex;justify-content:space-between;align-items:center}
+
+    /* Responsive */
+    @media(max-width:980px){
+      .hero{grid-template-columns:1fr;}
+      .logo-wrap{width:300px;height:300px;margin:0 auto}
+      .projects-grid{grid-template-columns:repeat(2,1fr)}
+      .contact-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:520px){nav ul{display:none}.brand h1{display:none}.logo-wrap{width:240px;height:240px}.projects-grid{grid-template-columns:1fr}.projects{padding-bottom:18px}}
+
+    /* small animations */
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+    .logo-wrap img{animation:floaty 6s ease-in-out infinite}
+
+    /* Modal for coming soon */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:24px;z-index:2000}
+    .modal.open{display:flex}
+    .modal-content{
+      max-width:420px;width:100%;background:var(--bg);
+      border-radius:20px;padding:40px 32px;text-align:center;position:relative;
+      border:2px solid var(--emerald);box-shadow:0 20px 60px rgba(15,107,82,0.15);
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(212,169,75,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(15,107,82,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(212,169,75,0.03) 0%, transparent 50%);
+    }
+    .modal-close{position:absolute;top:12px;left:12px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;color:var(--muted)}
+    .modal-logo{width:80px;height:80px;margin:0 auto 20px;border-radius:16px;object-fit:contain;filter:drop-shadow(0 8px 20px rgba(15,107,82,0.15))}
+    
+    /* Andalusian decorative elements */
+    .modal-ornament{position:absolute;width:60px;height:60px;opacity:0.12;color:var(--emerald)}
+    .modal-ornament.top-right{top:20px;right:20px;transform:rotate(45deg)}
+    .modal-ornament.bottom-left{bottom:20px;left:20px;transform:rotate(-135deg)}
+    
+    /* Loading spinner */
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .loading-spinner{width:32px;height:32px;border:3px solid rgba(15,107,82,0.2);border-top:3px solid var(--emerald);border-radius:50%;animation:spin 1s linear infinite;margin:16px auto 0}
+
+    /* Interactive project items */
+    .project-item{cursor:pointer;transition:all 0.3s ease}
+    .project-item:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(15,107,82,0.2)}
+
+    /* Custom Alert Modal */
+    .alert-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:24px;z-index:3000}
+    .alert-modal.open{display:flex}
+    .alert-content{
+      max-width:480px;width:100%;background:var(--bg);
+      border-radius:20px;padding:40px 32px;text-align:center;position:relative;
+      border:2px solid var(--emerald);box-shadow:0 20px 60px rgba(15,107,82,0.15);
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(212,169,75,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(15,107,82,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(212,169,75,0.03) 0%, transparent 50%);
+    }
+    .alert-close{position:absolute;top:12px;left:12px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;color:var(--muted);transition:all 0.3s ease}
+    .alert-close:hover{background:rgba(15,107,82,0.1);color:var(--emerald)}
+    .alert-logo{width:80px;height:80px;margin:0 auto 20px;border-radius:16px;object-fit:contain;filter:drop-shadow(0 8px 20px rgba(15,107,82,0.15))}
+    .alert-title{color:var(--emerald);margin:0 0 16px;font-size:24px;font-weight:700}
+    .alert-message{color:var(--muted);margin:0 0 24px;line-height:1.6;font-size:16px}
+    .alert-button{
+      display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:12px;font-weight:700;
+      border:2px solid var(--emerald);background:var(--emerald);color:#fff;cursor:pointer;transition:all .28s ease;
+      font-size:16px;min-width:140px;justify-content:center;
+    }
+    .alert-button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(15,107,82,0.25);background:var(--emerald-2)}
+    .alert-button.secondary{
+      background:transparent;color:var(--emerald);margin-right:12px;
+    }
+    .alert-button.secondary:hover{background:rgba(15,107,82,0.1)}
+    .alert-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+    /* تحسين عداد الأحرف */
+    #charCount {
+      transition: color 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .char-count-container {
+      background: rgba(15,107,82,0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(15,107,82,0.1);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="nav">
+        <div class="brand">
+          <img src="logo.png" alt="logo">
+          <div>
+            <h1>منصة وقف الرقمية</h1>
+            <div style="font-size:12px;color:var(--muted)">تصميم مواقع وتطبيقات إسلامية</div>
+          </div>
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#about">من نحن</a></li>
+            <li><a href="#services">الخدمات</a></li>
+            <li><a href="#projects">مشاريعنا</a></li>
+            <li><a href="#contact">تواصل</a></li>
+            <li><a href="privacy-policy.html">سياسة الخصوصية</a></li>
+            <li><a href="service-request.html">طلب خدمة</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-card">
+          <h2>حوّل صدقتك إلى وقف رقمي يخدم الناس 24/7</h2>
+          <p>نصمم ونطوّر مواقع وتطبيقات إسلامية (قرآن، أذكار، أحاديث، مواقيت صلاة) كاشتراك استضافة أو كصدقة جارية باسمك أو باسم من تحب. نُسلم المشروع جاهزًا للعمل بدون تدخل منك.</p>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px">
+            <a class="btn btn-gold" href="https://wa.me/218926913773?text=السلام+عليكم+أود+طلب+خدمة+من+منصة+وقف+الرقمية" target="_blank">اطلب خدمة الآن</a>
+            <a class="btn" href="#services">اطلع على خدماتنا</a>
+            <a class="btn" href="#projects">مشاريع نموذجية</a>
+          </div>
+
+          <div style="margin-top:18px;font-size:14px;color:var(--muted)">حساباتنا على السوشيال: @vakifplatformdesign</div>
+        </div>
+
+        <aside class="logo-panel">
+          <div class="logo-wrap">
+            <img src="logo.png" alt="منصة وقف الرقمية">
+          </div>
+        </aside>
+      </section>
+
+      <section id="about" class="section">
+        <div class="hero-card">
+          <h3 style="margin-top:0;color:var(--emerald)">من نحن</h3>
+          <p style="margin-bottom:8px">منصة وقف الرقمية فريق متخصص يصمم ويطوّر تجارب رقمية إسلامية راقية؛ من مواقع القرآن والتلاوات، إلى تطبيقات الأذكار والأحاديث، ولوحات مواقيت الصلاة. نُحوّل نيتك الطيبة إلى صدقة جارية مؤثرة تعمل 24/7 وتصل إلى آلاف المستخدمين.</p>
+          <p style="margin:0">نقدّم كل ما يلزم لنجاح مشروعك: بحث وتجربة مستخدم، تصميم واجهات حديثة متوافقة مع الهوية الإسلامية، برمجة موثوقة عالية الأداء، استضافة آمنة وتحديثات دورية، ودعم مستمر. نسلمك مشروعًا جاهزًا للعمل دون عناء—بجودة تُشرف اسمك وتخدم المجتمع.</p>
+        </div>
+      </section>
+
+      <section id="services" class="section">
+        <h2 style="margin:6px 0 12px;color:var(--emerald)">خدماتنا</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>تصميم وتطوير مواقع القرآن والتلاوات</h3>
+            <p>مواقع متكاملة تعرض القرآن مصحوبًا بتسجيلات صوتية، بحث في الآيات، وترجمات بعدة لغات.</p>
+          </article>
+
+          <article class="card">
+            <h3>تطبيقات الأذكار والأدعية</h3>
+            <p>تطبيقات تعمل على الهاتف مع تذكير يومي، أصوات، وإمكانية إهداء التطبيق صدقة عن اسم متوفى.</p>
+          </article>
+
+          <article class="card">
+            <h3>تكامل صوتيات وقواعد بيانات</h3>
+            <p>رفع وتكامل ملفات صوتية لقراء مختلفين، ترتيب الآيات، ودعم لغات متعددة.</p>
+          </article>
+
+          <article class="card">
+            <h3>الاستضافة والصيانة</h3>
+            <p>حزم استضافة آمنة مع تحديثات دورية، نسخ احتياطي، ودعم فني حسب الاتفاق.</p>
+          </article>
+
+          <article class="card">
+            <h3>التصميم البصري والهوية</h3>
+            <p>هوية بصرية متكاملة — لوجو، غلاف صفحات السوشيال، مواد تسويقية بما يتوافق مع طابع المنصة.</p>
+          </article>
+
+          <article class="card">
+            <h3>إعلانات وإدارة محتوى</h3>
+            <p>خدمات إعداد الإعلانات والترويج، ونشر المحتوى لضمان وصول الصدقة لأكبر عدد من المستفيدين.</p>
+          </article>
+
+          <article class="card">
+            <h3>تطبيقات مواقيت الصلاة</h3>
+            <p>تطبيقات ذكية لمواقيت الصلاة مع إشعارات، بوصلة قبلة، تقويم هجري، وأدعية مأثورة لكل وقت.</p>
+          </article>
+
+          <article class="card">
+            <h3>مواقع تعليمية إسلامية</h3>
+            <p>منصات تعليمية تفاعلية للعلوم الشرعية، دروس قرآن، أحاديث، فقه، وسيرة نبوية مع اختبارات وتقييم.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- زر طلب خدمة عبر واتساب -->
+      <div style="text-align:center;margin:40px 0;padding:20px;">
+        <a class="cta" href="https://wa.me/218926913773?text=السلام+عليكم+أود+طلب+خدمة+من+منصة+وقف+الرقمية" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;padding:16px 24px;border-radius:16px;cursor:pointer;background:linear-gradient(135deg, rgba(15,107,82,0.1), rgba(15,107,82,0.05));border:2px solid var(--emerald);box-shadow:0 8px 25px rgba(15,107,82,0.15);transition:all 0.3s ease;text-decoration:none;font-size:18px;font-weight:700;">
+          <img src="whatsapp.png" alt="واتساب" style="width:28px;height:28px;display:inline-block;animation:pulse 2s ease-in-out infinite">
+          <span style="color:var(--emerald);font-weight:700;">طلب خدمة عبر واتساب</span>
+        </a>
+      </div>
+
+      <section id="projects" class="section projects">
+        <h2 style="margin:6px 0 12px;color:var(--emerald)">نماذج سريعة</h2>
+        <div class="projects-grid">
+          <div class="project-item">مثال: موقع قرآن تفاعلي</div>
+          <div class="project-item">مثال: تطبيق أذكار يومية</div>
+          <div class="project-item">مثال: مكتبة أحاديث صوتية</div>
+        </div>
+
+        <div style="margin-top:12px" class="portfolio-grid" aria-label="شبكة صور المشاريع">
+          <figure class="portfolio-item"><img class="project-img" data-base="1" alt="صورة مشروع 1" loading="lazy" decoding="async"></figure>
+          <figure class="portfolio-item"><img class="project-img" data-base="2" alt="صورة مشروع 2" loading="lazy" decoding="async"></figure>
+          <figure class="portfolio-item"><img class="project-img" data-base="3" alt="صورة مشروع 3" loading="lazy" decoding="async"></figure>
+          <figure class="portfolio-item"><img class="project-img" data-base="4" alt="صورة مشروع 4" loading="lazy" decoding="async"></figure>
+        </div>
+      </section>
+
+      
+
+      <section id="contact" class="section">
+        <h2 style="margin:6px 0 12px;color:var(--emerald)">تواصل معنا</h2>
+        <div class="contact-grid">
+          <div class="form hero-card">
+            <div style="text-align:center;margin-bottom:24px;">
+              <img src="logo.png" alt="شعار منصة وقف" style="width:64px;height:64px;border-radius:14px;margin-bottom:16px;filter:drop-shadow(0 6px 16px rgba(15,107,82,0.15))">
+              <p style="color:var(--muted);margin:0;font-size:15px">اختر نوع التواصل وأرسل رسالتك</p>
+            </div>
+
+            <!-- نوع التواصل -->
+            <div style="margin-bottom:24px;">
+              <label style="display:block;margin-bottom:10px;color:var(--emerald);font-weight:600;font-size:15px;">نوع التواصل:</label>
+              
+              <!-- Dropdown Button -->
+              <div style="position:relative;">
+                <button type="button" onclick="toggleDropdown()" id="dropdownButton" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 16px;border-radius:10px;border:2px solid rgba(15,107,82,0.15);background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));box-shadow:0 2px 8px rgba(15,107,82,0.08);cursor:pointer;transition:all 0.3s ease;color:var(--emerald);font-weight:600;font-size:14px;">
+                  <span id="selectedOption">اختر نوع التواصل</span>
+                  <svg id="dropdownArrow" width="18" height="18" fill="currentColor" viewBox="0 0 20 20" style="transition:transform 0.3s ease;">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+                
+                <!-- Dropdown Menu -->
+                <div id="dropdownMenu" style="position:absolute;top:100%;left:0;right:0;background:rgba(255,255,255,0.95);border:2px solid rgba(15,107,82,0.15);border-radius:10px;box-shadow:0 8px 25px rgba(15,107,82,0.15);margin-top:4px;z-index:100;display:none;backdrop-filter:blur(10px);">
+                  <div style="padding:6px;">
+                    <div style="padding:10px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s ease;color:var(--emerald);font-weight:600;font-size:14px;text-align:center;" onmouseover="this.style.background='rgba(15,107,82,0.08)'" onmouseout="this.style.background='transparent'" onclick="selectOption('suggestion', 'اقتراح')">
+                      اقتراح
+                    </div>
+                    <div style="padding:10px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s ease;color:var(--emerald);font-weight:600;font-size:14px;text-align:center;" onmouseover="this.style.background='rgba(15,107,82,0.08)'" onmouseout="this.style.background='transparent'" onclick="selectOption('complaint', 'شكوى')">
+                      شكوى
+                    </div>
+                    <div style="padding:10px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s ease;color:var(--emerald);font-weight:600;font-size:14px;text-align:center;" onmouseover="this.style.background='rgba(15,107,82,0.08)'" onmouseout="this.style.background='transparent'" onclick="selectOption('request', 'طلب تواصل')">
+                      طلب تواصل
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- الصف الأول: الاسم -->
+            <div style="margin-bottom:20px;">
+              <label style="display:block;margin-bottom:8px;color:var(--emerald);font-weight:600;font-size:14px;">الاسم الكامل:</label>
+              <input type="text" id="contactName" placeholder="اكتب اسمك الكامل" style="width:100%;padding:12px 16px;border-radius:10px;border:2px solid rgba(15,107,82,0.1);font-size:14px;transition:all 0.3s ease;background:rgba(255,255,255,0.9);box-shadow:0 2px 6px rgba(15,107,82,0.05);" onfocus="this.style.borderColor='var(--emerald)';this.style.boxShadow='0 4px 12px rgba(15,107,82,0.15)'" onblur="this.style.borderColor='rgba(15,107,82,0.1)';this.style.boxShadow='0 2px 6px rgba(15,107,82,0.05)'" />
+            </div>
+
+            <!-- الصف الثاني: البريد الإلكتروني والهاتف -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+              <div>
+                <label style="display:block;margin-bottom:8px;color:var(--emerald);font-weight:600;font-size:14px;">البريد الإلكتروني:</label>
+                <input type="email" id="contactEmail" placeholder="example@email.com" style="width:100%;padding:12px 16px;border-radius:10px;border:2px solid rgba(15,107,82,0.1);font-size:14px;transition:all 0.3s ease;background:rgba(255,255,255,0.9);box-shadow:0 2px 6px rgba(15,107,82,0.05);" onfocus="this.style.borderColor='var(--emerald)';this.style.boxShadow='0 4px 12px rgba(15,107,82,0.15)'" onblur="this.style.borderColor='rgba(15,107,82,0.1)';this.style.boxShadow='0 2px 6px rgba(15,107,82,0.05)'" />
+              </div>
+              <div>
+                <label style="display:block;margin-bottom:8px;color:var(--emerald);font-weight:600;font-size:14px;" >رقم الهاتف:</label>
+                <input type="tel" id="contactPhone" placeholder="+218 90 000 0000" style="width:100%;padding:12px 16px;border-radius:10px;border:2px solid rgba(15,107,82,0.1);font-size:14px;transition:all 0.3s ease;background:rgba(255,255,255,0.9);box-shadow:0 2px 6px rgba(15,107,82,0.05);" onfocus="this.style.borderColor='var(--emerald)';this.style.boxShadow='0 4px 12px rgba(15,107,82,0.15)'" onblur="this.style.borderColor='rgba(15,107,82,0.1)';this.style.boxShadow='0 2px 6px rgba(15,107,82,0.05)'" />
+              </div>
+            </div>
+
+            <!-- الصف الثالث: الرسالة -->
+            <div style="margin-bottom:24px;">
+              <label style="display:block;margin-bottom:8px;color:var(--emerald);font-weight:600;font-size:14px;">الرسالة:</label>
+              <textarea id="contactMessage" rows="4" placeholder="اكتب رسالتك هنا (الحد الأقصى: 1000 حرف)..." maxlength="1000" style="width:100%;padding:12px 16px;border-radius:10px;border:2px solid rgba(15,107,82,0.1);font-size:14px;resize:vertical;transition:all 0.3s ease;background:rgba(255,255,255,0.9);box-shadow:0 2px 6px rgba(15,107,82,0.05);min-height:100px;" onfocus="this.style.borderColor='var(--emerald)';this.style.boxShadow='0 4px 12px rgba(15,107,82,0.15)'" onblur="this.style.borderColor='rgba(15,107,82,0.1)';this.style.boxShadow='0 2px 6px rgba(15,107,82,0.05)'" oninput="updateCharCount()"></textarea>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                <div style="font-size:12px;color:var(--muted);">
+                  <span id="charCount">0</span> / 1000 حرف
+                </div>
+                <div style="font-size:12px;color:var(--emerald);font-weight:600;">
+                  الحد الأقصى: 1000 حرف
+                </div>
+              </div>
+            </div>
+            
+            <!-- زر الإرسال -->
+            <div style="text-align:center;">
+              <button type="button" onclick="submitContactForm()" class="btn btn-gold" style="padding:14px 28px;font-size:16px;min-width:180px;border-radius:12px;font-weight:700;box-shadow:0 6px 20px rgba(212,169,75,0.3);">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style="margin-left:8px;">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                </svg>
+                إرسال الرسالة
+              </button>
+            </div>
+          </div>
+
+          <aside class="hero-card">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-weight:700;color:var(--emerald)">معلومات التواصل</div>
+              <div style="color:var(--muted)"><strong>الهاتف:</strong> <a href="tel:+218926913773">3773 691 92 218+</a></div>
+              <div style="color:var(--muted)"><strong>الايميل:</strong> <a href="mailto:vakifplatformdesign@gmail.com">vakifplatformdesign@gmail.com</a></div>
+              
+              <!-- QR Code Section -->
+              <div style="margin-top:20px;text-align:center;padding:20px;background:linear-gradient(135deg, rgba(15,107,82,0.05), rgba(15,107,82,0.02));border-radius:16px;border:1px solid rgba(15,107,82,0.1);">
+                <div style="margin-bottom:16px;">
+                  <img src="QR.png" alt="QR Code" style="width:120px;height:120px;border-radius:12px;box-shadow:0 8px 25px rgba(15,107,82,0.15);transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                </div>
+                <div style="color:var(--emerald);font-weight:700;font-size:16px;margin-bottom:8px;">امسح الكود</div>
+                <div style="color:var(--muted);font-size:14px;line-height:1.5;">للوصول إلى صفحاتنا على مواقع التواصل الاجتماعي</div>
+                <div style="margin-top:12px;">
+                  <a href="social-media.html" class="btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-size:14px;text-decoration:none;">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm4.81 12.81a6.72 6.72 0 0 1-7.77 1.37 6.72 6.72 0 0 1-1.37-7.77L8 8l4.81 4.81z"/>
+                    </svg>
+                    عرض جميع المنصات
+                  </a>
+                </div>
+              </div>
+
+              <div style="margin-top:8px;text-align:center">
+                <a class="btn" href="https://wa.me/218926913773?text=السلام+عليكم+أود+الاستفسار+عن+خدمات+المنصة" target="_blank">محادثة سريعة</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div style="display:flex;gap:14px;align-items:center">
+        <img src="logo.png" style="width:48px;height:48px;border-radius:8px;object-fit:contain" alt="logo">
+        <div>
+          <div style="font-weight:700;color:var(--emerald)">منصة وقف الرقمية</div>
+          <div style="font-size:13px;color:var(--muted)">جميع الحقوق محفوظة © منصة وقف الرقمية</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="https://instagram.com/vakifplatformdesign" target="_blank" style="text-decoration:none;color:var(--muted)">@vakifplatformdesign</a>
+        <a href="mailto:vakifplatformdesign@gmail.com" style="text-decoration:none;color:var(--muted)">vakifplatformdesign@gmail.com</a>
+        <a class="btn" href="https://wa.me/218926913773?text=السلام+عليكم+أود+الاستفسار+عن+خدمات+المنصة" target="_blank">اتصل الآن</a>
+      </div>
+    </footer>
+
+  </div>
+  
+  <!-- Modal للنماذج قريبًا -->
+  <div id="comingSoonModal" class="modal" aria-hidden="true" role="dialog" aria-label="المحتوى قريبًا">
+    <div class="modal-content">
+      <!-- زخارف أندلسية -->
+      <svg class="modal-ornament top-right" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50,10 L60,30 L80,20 L70,40 L90,50 L70,60 L80,80 L60,70 L50,90 L40,70 L20,80 L30,60 L10,50 L30,40 L20,20 L40,30 Z"/>
+      </svg>
+      <svg class="modal-ornament bottom-left" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50,10 L60,30 L80,20 L70,40 L90,50 L70,60 L80,80 L60,70 L50,90 L40,70 L20,80 L30,60 L10,50 L30,40 L20,20 L40,30 Z"/>
+      </svg>
+      
+      <button type="button" class="modal-close" aria-label="إغلاق">×</button>
+      <img src="logo.png" alt="شعار منصة وقف" class="modal-logo">
+      <h3 style="color:var(--emerald);margin:0 0 12px;font-size:24px">قريبًا إن شاء الله</h3>
+      <p style="color:var(--muted);margin:0 0 8px;line-height:1.6">المشروع تحت الصيانة</p>
+      <p style="color:#666;margin:0;font-size:14px">سيكون متاحًا للعرض والتجربة قريبًا</p>
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Custom Alert Modal -->
+  <div id="alertModal" class="alert-modal" aria-hidden="true" role="dialog" aria-label="رسالة تنبيه">
+    <div class="alert-content">
+      <!-- زخارف أندلسية -->
+      <svg class="modal-ornament top-right" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50,10 L60,30 L80,20 L70,40 L90,50 L70,60 L80,80 L60,70 L50,90 L40,70 L20,80 L30,60 L10,50 L30,40 L20,20 L40,30 Z"/>
+      </svg>
+      <svg class="modal-ornament bottom-left" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50,10 L60,30 L80,20 L70,40 L90,50 L70,60 L80,80 L60,70 L50,90 L40,70 L20,80 L30,60 L10,50 L30,40 L20,20 L40,30 Z"/>
+      </svg>
+      
+      <button type="button" class="alert-close" aria-label="إغلاق" onclick="closeAlertModal()">×</button>
+      <img src="logo.png" alt="شعار منصة وقف" class="alert-logo">
+      <h3 class="alert-title" id="alertTitle">عنوان الرسالة</h3>
+      <p class="alert-message" id="alertMessage">محتوى الرسالة</p>
+      <div class="alert-buttons" id="alertButtons">
+        <button class="alert-button" onclick="closeAlertModal()">حسناً</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load images 1..4 with smart extension fallback (webp, jpg, jpeg, png)
+    (function(){
+      var extensions = ['webp','jpg','jpeg','png'];
+      var imgs = document.querySelectorAll('.project-img');
+      imgs.forEach(function(img){
+        var base = img.getAttribute('data-base');
+        var i = 0;
+        function tryNext(){
+          if(i >= extensions.length){ return; }
+          var candidate = base + '.' + extensions[i++];
+          var test = new Image();
+          test.onload = function(){ img.src = candidate; };
+          test.onerror = tryNext;
+          test.src = candidate;
+        }
+        tryNext();
+      });
+    })();
+
+    // Modal functionality for project items
+    (function(){
+      var modal = document.getElementById('comingSoonModal');
+      var closeBtn = modal.querySelector('.modal-close');
+      var projectItems = document.querySelectorAll('.project-item');
+      
+      function openModal(){
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+      
+      // Add click handlers to project items
+      projectItems.forEach(function(item){
+        item.addEventListener('click', openModal);
+      });
+      
+      // Close modal handlers
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(e){
+        if(e.target === modal) closeModal();
+      });
+      window.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+    })();
+
+    // Contact Form Functionality
+    function submitContactForm() {
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+      const selectedOption = document.getElementById('selectedOption').textContent;
+
+      // التحقق من أن نوع التواصل تم اختياره
+      if (selectedOption === 'اختر نوع التواصل') {
+        showAlert('نوع التواصل مطلوب', 'يرجى اختيار نوع التواصل (اقتراح، شكوى، أو طلب تواصل)', 'error');
+        return;
+      }
+
+      // التحقق من الحقول المطلوبة
+      if (!name || !email || !phone || !message) {
+        showAlert('حقل مطلوب', 'يرجى ملء جميع الحقول المطلوبة', 'error');
+        return;
+      }
+
+      // التحقق من صحة البريد الإلكتروني
+      if (!isValidEmail(email)) {
+        showAlert('بريد إلكتروني غير صحيح', 'يرجى إدخال بريد إلكتروني صحيح', 'error');
+        return;
+      }
+
+      // التحقق من صحة رقم الهاتف
+      if (!isValidPhone(phone)) {
+        showAlert('رقم هاتف غير صحيح', 'يرجى إدخال رقم هاتف صحيح', 'error');
+        return;
+      }
+
+      // تحديد نوع التواصل من النص المحدد
+      let contactType = '';
+      if (selectedOption === 'اقتراح') contactType = 'suggestion';
+      else if (selectedOption === 'شكوى') contactType = 'complaint';
+      else if (selectedOption === 'طلب تواصل') contactType = 'request';
+
+      // Create contact request object
+      const contactRequest = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        phone: phone,
+        message: message,
+        type: contactType,
+        status: 'unread',
+        date: new Date().toLocaleString('en-GB', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }),
+        timestamp: Date.now()
+      };
+
+      // Save to localStorage
+      saveContactRequest(contactRequest);
+
+      // Show success message with logo
+      showAlertWithLogo('تم الإرسال بنجاح', 'شكراً لك! تم إرسال رسالتك بنجاح وسنقوم بالرد عليك في أقرب وقت ممكن.', 'success');
+
+      // Reset form
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactEmail').value = '';
+      document.getElementById('contactPhone').value = '';
+      document.getElementById('contactMessage').value = '';
+      document.getElementById('selectedOption').textContent = 'اختر نوع التواصل';
+    }
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function isValidPhone(phone) {
+      // تنظيف الرقم من المسافات والرموز
+      const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+      
+      // التحقق من أن الرقم يحتوي على أرقام فقط
+      if (!/^\d+$/.test(cleanPhone)) {
+        return false;
+      }
+      
+      // التحقق من طول الرقم (يجب أن يكون 9-15 رقم)
+      if (cleanPhone.length < 9 || cleanPhone.length > 15) {
+        return false;
+      }
+      
+      return true;
+    }
+
+    function updateCharCount() {
+      const textarea = document.getElementById('contactMessage');
+      const charCount = document.getElementById('charCount');
+      const currentLength = textarea.value.length;
+      const maxLength = 1000;
+      
+      charCount.textContent = currentLength;
+      
+      // تغيير لون العداد حسب النسبة
+      if (currentLength >= maxLength * 0.9) {
+        charCount.style.color = '#dc3545'; // أحمر
+      } else if (currentLength >= maxLength * 0.7) {
+        charCount.style.color = '#ffc107'; // أصفر
+      } else {
+        charCount.style.color = 'var(--muted)'; // رمادي
+      }
+    }
+
+    function saveContactRequest(contactRequest) {
+      let requests = JSON.parse(localStorage.getItem('contactRequests') || '[]');
+      requests.push(contactRequest);
+      localStorage.setItem('contactRequests', JSON.stringify(requests));
+    }
+
+    // Custom Alert Modal Functions
+    function showAlert(title, message, type = 'info') {
+      const modal = document.getElementById('alertModal');
+      const titleEl = document.getElementById('alertTitle');
+      const messageEl = document.getElementById('alertMessage');
+      const buttonsEl = document.getElementById('alertButtons');
+
+      titleEl.textContent = title;
+      messageEl.textContent = message;
+
+      // Set button based on type
+      if (type === 'error') {
+        buttonsEl.innerHTML = '<button class="alert-button" onclick="closeAlertModal()">حسناً</button>';
+      } else if (type === 'success') {
+        buttonsEl.innerHTML = '<button class="alert-button" onclick="closeAlertModal()">ممتاز</button>';
+      } else {
+        buttonsEl.innerHTML = '<button class="alert-button" onclick="closeAlertModal()">حسناً</button>';
+      }
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function showAlertWithLogo(title, message, type = 'success') {
+      const modal = document.getElementById('alertModal');
+      const titleEl = document.getElementById('alertTitle');
+      const messageEl = document.getElementById('alertMessage');
+      const buttonsEl = document.getElementById('alertButtons');
+
+      titleEl.textContent = title;
+      messageEl.innerHTML = `
+        <div style="text-align:center;padding:10px;">
+          <img src="logo.png" alt="شعار منصة وقف" style="width:60px;height:60px;border-radius:12px;margin:0 auto 15px;box-shadow:0 6px 20px rgba(15,107,82,0.15);">
+          <p style="margin:0;color:var(--muted);line-height:1.6;font-size:16px;">${message}</p>
+        </div>
+      `;
+
+      // Set button based on type
+      if (type === 'success') {
+        buttonsEl.innerHTML = '<button class="alert-button" onclick="closeAlertModal()">ممتاز</button>';
+      } else {
+        buttonsEl.innerHTML = '<button class="alert-button" onclick="closeAlertModal()">حسناً</button>';
+      }
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAlertModal() {
+      const modal = document.getElementById('alertModal');
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // Close alert modal on escape key
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeAlertModal();
+      }
+    });
+
+    // Dropdown Functions
+    function toggleDropdown() {
+      const menu = document.getElementById('dropdownMenu');
+      const arrow = document.getElementById('dropdownArrow');
+      const isOpen = menu.style.display === 'block';
+      
+      if (isOpen) {
+        menu.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      } else {
+        menu.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function selectOption(value, text) {
+      // Update selected option text
+      document.getElementById('selectedOption').textContent = text;
+      
+      // Close dropdown
+      toggleDropdown();
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('dropdownButton');
+      const menu = document.getElementById('dropdownMenu');
+      
+      if (!dropdown.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = 'none';
+        document.getElementById('dropdownArrow').style.transform = 'rotate(0deg)';
+      }
+    });
+  </script>
+</body>
+</html>

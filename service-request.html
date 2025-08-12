@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>طلب خدمة — منصة وقف الرقمية</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="shortcut icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f3f5f4;
+      --emerald: #0f6b52;
+      --emerald-2: #0d8a66;
+      --gold: #d4a94b;
+      --muted: #6b6b6b;
+      --glass: rgba(255,255,255,0.07);
+      --glass-2: rgba(255,255,255,0.12);
+      --card-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+      --glass-border: rgba(255,255,255,0.18);
+      font-family: 'Cairo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#0b1720;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      direction:rtl;
+    }
+
+    .container{max-width:800px;margin:0 auto;padding:28px}
+
+    /* Header */
+    .page-header{
+      text-align:center;margin-bottom:40px;padding:40px 0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+      border-radius:20px;border:1px solid rgba(15,107,82,0.08);
+    }
+    .logo-large{width:120px;height:120px;margin:0 auto 20px;border-radius:20px;object-fit:contain;filter:drop-shadow(0 12px 24px rgba(15,107,82,0.15))}
+    .page-title{color:var(--emerald);font-size:32px;margin:0 0 8px;font-weight:700}
+    .page-subtitle{color:var(--muted);font-size:16px;margin:0}
+
+    /* Form styles */
+    .form-container{
+      background:rgba(255,255,255,0.95);padding:40px;border-radius:20px;
+      border:1px solid rgba(15,107,82,0.08);box-shadow:var(--card-shadow);
+      position:relative;overflow:hidden;
+    }
+    .form-container::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:4px;
+      background:linear-gradient(90deg, var(--emerald), var(--gold), var(--emerald-2));
+    }
+
+    .form-group{margin-bottom:24px}
+    .form-label{
+      display:block;margin-bottom:8px;color:var(--emerald);font-weight:600;font-size:16px;
+    }
+    .form-input, .form-textarea, .form-select{
+      width:100%;padding:14px 16px;border:2px solid rgba(15,107,82,0.1);
+      border-radius:12px;font-size:16px;font-family:inherit;transition:all 0.3s ease;
+      background:rgba(255,255,255,0.9);
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus{
+      outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px rgba(15,107,82,0.1);
+      background:#fff;
+    }
+    .form-textarea{min-height:120px;resize:vertical}
+    .form-select{appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%230f6b52' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 16px center;background-size:16px}
+
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    
+    .submit-btn{
+      width:100%;padding:16px;background:linear-gradient(135deg, var(--emerald), var(--emerald-2));
+      color:#fff;border:none;border-radius:12px;font-size:18px;font-weight:700;
+      cursor:pointer;transition:all 0.3s ease;font-family:inherit;
+    }
+    .submit-btn:hover{
+      transform:translateY(-2px);box-shadow:0 8px 25px rgba(15,107,82,0.3);
+      background:linear-gradient(135deg, var(--emerald-2), var(--emerald));
+    }
+    .submit-btn:active{transform:translateY(0)}
+
+    /* Back button */
+    .back-btn{
+      display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;
+      background:var(--emerald);color:#fff;text-decoration:none;font-weight:600;
+      transition:all 0.3s ease;margin-bottom:24px;
+    }
+    .back-btn:hover{background:var(--emerald-2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(15,107,82,0.2)}
+
+    /* Success message */
+    .success-message{
+      display:none;background:linear-gradient(135deg, #10b981, #059669);
+      color:#fff;padding:20px;border-radius:12px;text-align:center;margin-top:20px;
+      animation:slideIn 0.5s ease;
+    }
+    @keyframes slideIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Footer */
+    .page-footer{
+      text-align:center;margin-top:40px;padding:24px;color:var(--muted);
+      border-top:1px solid rgba(15,107,82,0.08)
+    }
+
+    @media(max-width:768px){
+      .container{padding:20px}
+      .page-header{padding:30px 20px}
+      .form-container{padding:30px 20px}
+      .form-row{grid-template-columns:1fr;gap:16px}
+      .page-title{font-size:28px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">← العودة للرئيسية</a>
+    
+    <header class="page-header">
+      <img src="logo.png" alt="شعار منصة وقف الرقمية" class="logo-large">
+      <h1 class="page-title">طلب خدمة مخصصة</h1>
+      <p class="page-subtitle">أخبرنا عن مشروعك وسنقوم بتصميمه وتطويره لك</p>
+    </header>
+
+    <main>
+      <form class="form-container" id="serviceForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName" class="form-label">الاسم الكامل *</label>
+            <input type="text" id="fullName" name="fullName" class="form-input" required placeholder="أدخل اسمك الكامل">
+          </div>
+          
+          <div class="form-group">
+            <label for="phone" class="form-label">رقم الهاتف *</label>
+            <input type="tel" id="phone" name="phone" class="form-input" required placeholder="+218 92 000 0000">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="whatsapp" class="form-label">
+              رقم الواتساب
+              <label class="checkbox-container" style="display: inline-flex; align-items: center; gap: 8px; margin-right: 12px; cursor: pointer;">
+                <input type="checkbox" id="sameAsPhone" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                <span style="color: var(--emerald); font-weight: 600; font-size: 13px;">نفس رقم الهاتف</span>
+              </label>
+            </label>
+            <input type="tel" id="whatsapp" name="whatsapp" class="form-input" placeholder="+218 92 000 0000">
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label">البريد الإلكتروني *</label>
+            <input type="email" id="email" name="email" class="form-input" required placeholder="example@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="serviceType" class="form-label">نوع الخدمة المطلوبة *</label>
+          <select id="serviceType" name="serviceType" class="form-select" required>
+            <option value="">اختر نوع الخدمة</option>
+            <option value="quran-website">موقع قرآن وتلاوات</option>
+            <option value="dhikr-app">تطبيق أذكار وأدعية</option>
+            <option value="hadith-library">مكتبة أحاديث صوتية</option>
+            <option value="prayer-times">تطبيق مواقيت الصلاة</option>
+            <option value="islamic-education">موقع تعليمي إسلامي</option>
+            <option value="custom-project">مشروع مخصص آخر</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="budget" class="form-label">الميزانية المتوقعة</label>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="flex: 1;">
+              <label style="font-size: 14px; color: var(--muted); margin-bottom: 4px; display: block;">أدنى قيمة</label>
+              <input type="number" id="budgetMin" name="budgetMin" class="form-input" min="0" max="150" value="0" placeholder="0" style="text-align: center;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; color: var(--emerald); font-weight: 600; font-size: 16px;">
+              <span>إلى</span>
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 14px; color: var(--muted); margin-bottom: 4px; display: block;">أعلى قيمة</label>
+              <input type="number" id="budgetMax" name="budgetMax" class="form-input" min="0" max="150" value="150" placeholder="150" style="text-align: center;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px; color: var(--emerald); font-weight: 600; font-size: 16px; white-space: nowrap;">
+              <span>دولار أمريكي</span>
+              <span style="font-size: 18px;">$</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="timeline" class="form-label">الموعد المطلوب</label>
+          <select id="timeline" name="timeline" class="form-select">
+            <option value="">اختر الموعد المطلوب</option>
+            <option value="urgent">عاجل</option>
+            <option value="medium">متوسط</option>
+            <option value="flexible">مرن</option>
+            <option value="long-term">طويل المدى</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="projectDescription" class="form-label">وصف المشروع بالتفصيل *</label>
+          <textarea id="projectDescription" name="projectDescription" class="form-textarea" required maxlength="1000"
+            placeholder="اشرح لنا مشروعك بالتفصيل، ما هي الميزات المطلوبة؟ ما هو الجمهور المستهدف؟ هل لديك متطلبات خاصة؟ (الحد الأقصى: 1000 حرف)" oninput="updateServiceCharCount('projectDescription')"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+            <div style="font-size:12px;color:var(--muted);">
+              <span id="projectDescriptionCount">0</span> / 1000 حرف
+            </div>
+            <div style="font-size:12px;color:var(--emerald);font-weight:600;">
+              الحد الأقصى: 1000 حرف
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="additionalInfo" class="form-label">معلومات إضافية</label>
+          <textarea id="additionalInfo" name="additionalInfo" class="form-textarea" maxlength="1000"
+            placeholder="أي معلومات إضافية تريد مشاركتها معنا، مثل: مراجع تصميم، مواقع مشابهة، متطلبات تقنية خاصة (الحد الأقصى: 1000 حرف)" oninput="updateServiceCharCount('additionalInfo')"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+            <div style="font-size:12px;color:var(--muted);">
+              <span id="additionalInfoCount">0</span> / 1000 حرف
+            </div>
+            <div style="font-size:12px;color:var(--emerald);font-weight:600;">
+              الحد الأقصى: 1000 حرف
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">إرسال طلب الخدمة</button>
+      </form>
+
+      <div class="success-message" id="successMessage">
+        <h3>تم إرسال طلبك بنجاح! 🎉</h3>
+        <p>سنقوم بالرد عليك في أقرب وقت ممكن عبر البريد الإلكتروني أو الهاتف</p>
+        <p>شكراً لثقتك في منصة وقف الرقمية</p>
+      </div>
+    </main>
+
+    <footer class="page-footer">
+      <p>جميع الحقوق محفوظة © منصة وقف الرقمية 2025</p>
+      <p>نحن هنا لمساعدتك في تحقيق مشروعك الرقمي</p>
+    </footer>
+  </div>
+
+  <script>
+    // ميزة ربط رقم الواتساب برقم الهاتف
+    document.getElementById('sameAsPhone').addEventListener('change', function() {
+      const phoneInput = document.getElementById('phone');
+      const whatsappInput = document.getElementById('whatsapp');
+      
+      if (this.checked) {
+        // إذا تم تحديد checkbox، املأ رقم الواتساب برقم الهاتف
+        whatsappInput.value = phoneInput.value;
+        whatsappInput.style.backgroundColor = 'rgba(15,107,82,0.1)';
+        whatsappInput.style.cursor = 'not-allowed';
+        whatsappInput.readOnly = true;
+      } else {
+        // إذا تم إلغاء تحديد checkbox، افرغ رقم الواتساب وافعل الحقل
+        whatsappInput.value = '';
+        whatsappInput.style.backgroundColor = 'rgba(255,255,255,0.9)';
+        whatsappInput.style.cursor = 'text';
+        whatsappInput.readOnly = false;
+      }
+    });
+
+    // تحديث رقم الواتساب تلقائياً عند تغيير رقم الهاتف (إذا كان checkbox محدد)
+    document.getElementById('phone').addEventListener('input', function() {
+      const sameAsPhoneCheckbox = document.getElementById('sameAsPhone');
+      const whatsappInput = document.getElementById('whatsapp');
+      
+      if (sameAsPhoneCheckbox.checked) {
+        whatsappInput.value = this.value;
+      }
+    });
+
+    // تحسين حقول الميزانية
+    const budgetMin = document.getElementById('budgetMin');
+    const budgetMax = document.getElementById('budgetMax');
+
+    // التأكد من أن القيمة الدنيا لا تتجاوز القيمة العليا
+    budgetMin.addEventListener('input', function() {
+      const minValue = parseInt(this.value) || 0;
+      const maxValue = parseInt(budgetMax.value) || 150;
+      
+      if (minValue > maxValue) {
+        budgetMax.value = minValue;
+      }
+      
+      // التأكد من أن القيمة ضمن النطاق
+      if (minValue < 0) this.value = 0;
+      if (minValue > 150) this.value = 150;
+    });
+
+    // التأكد من أن القيمة العليا لا تقل عن القيمة الدنيا
+    budgetMax.addEventListener('input', function() {
+      const maxValue = parseInt(this.value) || 150;
+      const minValue = parseInt(budgetMin.value) || 0;
+      
+      if (maxValue < minValue) {
+        budgetMin.value = maxValue;
+      }
+      
+      // التأكد من أن القيمة ضمن النطاق
+      if (maxValue < 0) this.value = 0;
+      if (maxValue > 150) this.value = 150;
+    });
+
+    // إضافة تأثير بصري عند تغيير القيم
+    [budgetMin, budgetMax].forEach(input => {
+      input.addEventListener('input', function() {
+        if (this.value === '') {
+          this.style.color = 'var(--muted)';
+        } else {
+          this.style.color = 'var(--emerald)';
+        }
+      });
+    });
+
+    // معالجة إرسال النموذج
+    document.getElementById('serviceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // جمع البيانات من النموذج
+      const formData = {
+        fullName: document.getElementById('fullName').value,
+        phone: document.getElementById('phone').value,
+        whatsapp: document.getElementById('whatsapp').value,
+        email: document.getElementById('email').value,
+        serviceType: document.getElementById('serviceType').value,
+        budgetMin: document.getElementById('budgetMin').value,
+        budgetMax: document.getElementById('budgetMax').value,
+        timeline: document.getElementById('timeline').value,
+        projectDescription: document.getElementById('projectDescription').value,
+        additionalInfo: document.getElementById('additionalInfo').value,
+        timestamp: Date.now(),
+        status: 'pending'
+      };
+      
+      // حفظ الطلب في localStorage
+      let existingRequests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+      existingRequests.unshift(formData);
+      localStorage.setItem('customerRequests', JSON.stringify(existingRequests));
+      
+      // إظهار رسالة النجاح
+      document.getElementById('serviceForm').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'block';
+      
+      // تحديث رسالة النجاح مع الشعار
+      document.getElementById('successMessage').innerHTML = `
+        <div style="text-align:center;padding:20px;">
+          <img src="logo.png" alt="شعار منصة وقف" style="width:80px;height:80px;border-radius:16px;margin:0 auto 20px;box-shadow:0 8px 25px rgba(15,107,82,0.15);">
+          <h3 style="color:var(--emerald);margin-bottom:16px;">تم إرسال طلبك بنجاح! 🎉</h3>
+          <p style="color:var(--muted);margin-bottom:12px;font-size:16px;">سنقوم بالرد عليك في أقرب وقت ممكن عبر البريد الإلكتروني أو الهاتف</p>
+          <p style="color:var(--emerald);font-weight:600;margin-bottom:24px;">شكراً لثقتك في منصة وقف الرقمية</p>
+          <div style="margin-top:20px">
+            <a href="index.html" class="action-btn btn-primary" style="display:inline-block;padding:12px 24px;background:var(--emerald);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;">العودة للرئيسية</a>
+          </div>
+        </div>
+      `;
+      
+      // إعادة توجيه للرئيسية بعد 8 ثواني
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 8000);
+    });
+
+    // دالة تحديث عداد الأحرف
+    function updateServiceCharCount(fieldId) {
+      const textarea = document.getElementById(fieldId);
+      const charCount = document.getElementById(fieldId + 'Count');
+      const currentLength = textarea.value.length;
+      const maxLength = 1000;
+      
+      charCount.textContent = currentLength;
+      
+      // تغيير لون العداد حسب النسبة
+      if (currentLength >= maxLength * 0.9) {
+        charCount.style.color = '#dc3545'; // أحمر
+      } else if (currentLength >= maxLength * 0.7) {
+        charCount.style.color = '#ffc107'; // أصفر
+      } else {
+        charCount.style.color = 'var(--muted)'; // رمادي
+      }
+    }
+
+    // تحسين تجربة المستخدم
+    document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+</html> 
